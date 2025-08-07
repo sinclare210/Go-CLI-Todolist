@@ -9,11 +9,11 @@ func main() {
 	var option int
 	cont := "y"
 	var todos []string
-
+	var mark int
 	fmt.Println("##### Hello There! What's your plan for today #####")
 	fmt.Println()
 	for cont == "y" {
-		fmt.Println("{1 for Adding to todo, 2 for view all todo}")
+		fmt.Println("{1 for Adding to todo, 2 for view all todo, 3 for marking as complete}")
 		fmt.Scanln(&option)
 
 		switch option {
@@ -24,9 +24,16 @@ func main() {
 			viewTodos(todos)
 
 		case 2:
+			fmt.Println("Here are your todos")
+			fmt.Println()
 			fmt.Println(todos)
 			viewTodos(todos)
 
+		case 3:
+			fmt.Println("Choose the todo you want to mark as complete")
+			fmt.Scanln(&mark)
+			todos = completed(mark, todos)
+			viewTodos(todos)
 		default:
 			fmt.Println("Invalid Option, try again")
 
@@ -35,7 +42,6 @@ func main() {
 		fmt.Println()
 		fmt.Println("{y/n}")
 		fmt.Scanln(&cont)
-		
 
 	}
 
@@ -47,7 +53,20 @@ func addTask(todos []string, todo string) []string {
 }
 
 func viewTodos(todos []string) {
+
 	for i, e := range todos {
 		fmt.Println(i+1, ".", e)
 	}
+
+}
+
+func completed(index int, todos []string) []string {
+	index = index - 1
+	if index >= 0 && index < len(todos) {
+		todos[index] = "[x] " + todos[index]
+		fmt.Println("Marked as completed:", todos[index])
+	} else {
+		fmt.Println("Invalid task number.")
+	}
+	return todos
 }
