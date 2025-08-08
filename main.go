@@ -59,6 +59,10 @@ func addTask(todos []string, todo string) []string {
 }
 
 func viewTodos(todos []string) {
+	if len(todos) == 0 {
+		fmt.Println("No todos yet!")
+		return
+	}
 
 	for i, e := range todos {
 		fmt.Println(i+1, ".", e)
@@ -81,7 +85,8 @@ func deleted(index int, todos []string) []string {
 	index = index - 1
 	if index >= 0 && index < len(todos) {
 		todos = append(todos[:index], todos[index+1:]...)
-		fmt.Println("Successfully deleted:")
+		fmt.Println("Successfully deleted:", todos[index])
+		
 
 	} else {
 		fmt.Println("Invalid task number.")
