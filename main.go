@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"os"
 )
 
 func main() {
@@ -21,23 +23,27 @@ func main() {
 			fmt.Println("input todo")
 			fmt.Scanln(&todo)
 			todos = addTask(todos, todo)
+			saveTodo(todos)
 			viewTodos(todos)
 
 		case 2:
 			fmt.Println("Here are your todos")
 			fmt.Println()
 			fmt.Println(todos)
+
 			viewTodos(todos)
 
 		case 3:
 			fmt.Println("Choose the todo you want to mark as complete")
 			fmt.Scanln(&mark)
 			todos = completed(mark, todos)
+			saveTodo(todos)
 			viewTodos(todos)
 		case 4:
 			fmt.Println("Choose the todo you want to delete")
 			fmt.Scanln(&mark)
 			todos = deleted(mark, todos)
+			saveTodo(todos)
 			viewTodos(todos)
 
 		default:
@@ -86,10 +92,28 @@ func deleted(index int, todos []string) []string {
 	if index >= 0 && index < len(todos) {
 		todos = append(todos[:index], todos[index+1:]...)
 		fmt.Println("Successfully deleted:", todos[index])
-		
 
 	} else {
 		fmt.Println("Invalid task number.")
 	}
 	return todos
 }
+
+func saveTodo(todos []string) {
+	f, err := os.Create("Todo")
+	if err != nil {
+		fmt.Println("Error saving todos:", err)
+		return
+	}
+	defer f.Close()
+
+	for _, todo := range todos {
+		_, err := f.WriteString(todo + "\n")
+		if err != nil {
+			fmt.Println("Error writing to file:", err)
+			return
+		}
+	}
+}
+
+
