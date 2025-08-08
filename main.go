@@ -1,16 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 
 	"os"
 )
 
+const todoFile = "todos.txt"
+
 func main() {
 	var todo string
+
 	var option int
 	cont := "y"
 	var todos []string
+	todos = loadTodo()
 	var mark int
 	fmt.Println("##### Hello There! What's your plan for today #####")
 	fmt.Println()
@@ -100,7 +105,7 @@ func deleted(index int, todos []string) []string {
 }
 
 func saveTodo(todos []string) {
-	f, err := os.Create("Todo")
+	f, err := os.Create(todoFile)
 	if err != nil {
 		fmt.Println("Error saving todos:", err)
 		return
@@ -116,4 +121,23 @@ func saveTodo(todos []string) {
 	}
 }
 
+func loadTodo() []string {
+	var todos []string
 
+	f, err := os.Open(todoFile)
+	if err != nil {
+		return todos
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		todos = append(todos, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading file:", err)
+	}
+	return todos
+
+}
