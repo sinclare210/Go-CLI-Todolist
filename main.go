@@ -13,7 +13,7 @@ func main() {
 	fmt.Println("##### Hello There! What's your plan for today #####")
 	fmt.Println()
 	for cont == "y" {
-		fmt.Println("{1 for Adding to todo, 2 for view all todo, 3 for marking as complete}")
+		fmt.Println("{1 for Adding to todo, 2 for view all todo, 3 for marking as complete, 4 for deleteing todo}")
 		fmt.Scanln(&option)
 
 		switch option {
@@ -34,6 +34,12 @@ func main() {
 			fmt.Scanln(&mark)
 			todos = completed(mark, todos)
 			viewTodos(todos)
+		case 4:
+			fmt.Println("Choose the todo you want to delete")
+			fmt.Scanln(&mark)
+			todos = deleted(mark, todos)
+			viewTodos(todos)
+
 		default:
 			fmt.Println("Invalid Option, try again")
 
@@ -65,6 +71,18 @@ func completed(index int, todos []string) []string {
 	if index >= 0 && index < len(todos) {
 		todos[index] = "[x] " + todos[index]
 		fmt.Println("Marked as completed:", todos[index])
+	} else {
+		fmt.Println("Invalid task number.")
+	}
+	return todos
+}
+
+func deleted(index int, todos []string) []string {
+	index = index - 1
+	if index >= 0 && index < len(todos) {
+		todos = append(todos[:index], todos[index+1:]...)
+		fmt.Println("Successfully deleted:")
+
 	} else {
 		fmt.Println("Invalid task number.")
 	}
